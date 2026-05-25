@@ -1,6 +1,7 @@
 class CitationGenerator:
     SUPPORTED_STYLES = ["APA", "MLA", "Chicago"]
     SUPPORTED_EXPORTS = ["txt", "md"]
+    VALID_ISBN_LENGTHS = [10, 13]
 
     def validate_source(self, source: str) -> bool:
         """
@@ -16,10 +17,17 @@ class CitationGenerator:
         if source.startswith(("http://", "https://")):
             return True
 
-        if len(source.replace("-", "")) in [10, 13]:
+        if len(source.replace("-", "")) in self.VALID_ISBN_LENGTHS:
             return True
 
         return False
+
+    def validate_style(self, style: str) -> bool:
+        """
+        Перевіряє чи підтримується стиль цитування.
+        """
+
+        return style in self.SUPPORTED_STYLES
 
     def generate_citation(self, source: str, style: str) -> str:
         """
@@ -29,7 +37,7 @@ class CitationGenerator:
         if not self.validate_source(source):
             raise ValueError("Invalid source")
 
-        if style not in self.SUPPORTED_STYLES:
+        if not self.validate_style(style):
             raise ValueError("Unsupported citation style")
 
         return f"[{style}] Citation generated for: {source}"
