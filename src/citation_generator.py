@@ -13,7 +13,7 @@ class CitationGenerator:
         if source.startswith("10."):
             return True
 
-        if source.startswith("http://") or source.startswith("https://"):
+        if source.startswith(("http://", "https://")):
             return True
 
         if len(source.replace("-", "")) in [10, 13]:
